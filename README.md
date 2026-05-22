@@ -40,6 +40,7 @@ This notebook grew out of two related university assignments:
 Project 3 required a finance-focused data science analysis using Python, pandas, Matplotlib, and `yfinance`. Project 4 required students to extend their Project 3 work with machine-learning techniques.
 
 The Project 3 submission received **105/100**.
+The Project 4 submission received **100/100**.
 
 Instructor feedback for Project 3:
 
