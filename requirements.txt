@@ -1,0 +1,9 @@
+pandas
+numpy
+matplotlib
+yfinance
+pandas_datareader
+scikit-learn
+notebook
+nbconvert
+ipykernel
