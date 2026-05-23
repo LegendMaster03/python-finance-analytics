@@ -35,14 +35,31 @@ jobs:
         run: |
           jupyter nbconvert --clear-output --inplace finance-analysis.ipynb
 
-      - name: Execute notebook
+      - name: Execute notebook with retries
         run: |
-          jupyter nbconvert \
-            --to notebook \
-            --execute finance-analysis.ipynb \
-            --inplace \
-            --ExecutePreprocessor.kernel_name=python3 \
-            --ExecutePreprocessor.timeout=1200
+          for attempt in 1 2 3; do
+            echo "Notebook execution attempt $attempt..."
+
+            if jupyter nbconvert \
+              --to notebook \
+              --execute finance-analysis.ipynb \
+              --inplace \
+              --ExecutePreprocessor.kernel_name=python3 \
+              --ExecutePreprocessor.timeout=1200; then
+              echo "Notebook execution succeeded."
+              exit 0
+            fi
+
+            echo "Notebook execution failed on attempt $attempt."
+
+            if [ "$attempt" -lt 3 ]; then
+              echo "Waiting before retry..."
+              sleep 180
+            fi
+          done
+
+          echo "Notebook execution failed after 3 attempts."
+          exit 1
 
       - name: Commit updated notebook
         uses: stefanzweifel/git-auto-commit-action@v5
