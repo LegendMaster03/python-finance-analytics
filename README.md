@@ -1,6 +1,6 @@
 # Python Finance ML Analytics
 
-Python/Jupyter finance and machine-learning analysis using `pandas`, `NumPy`, `Matplotlib`, `yfinance`, FRED macroeconomic data, `pandas-datareader`, and `scikit-learn` to analyze Microsoft and peer technology stocks, compare valuation metrics, test macroeconomic relationships, and compare predictive models.
+Python/Jupyter finance and machine-learning analysis using `pandas`, `NumPy`, `Matplotlib`, `yfinance`, FRED macroeconomic data, SEC Company Facts, Stooq, `pandas-datareader`, and `scikit-learn` to analyze Microsoft and peer technology stocks, compare valuation metrics, test macroeconomic relationships, and compare predictive models.
 
 ## Project Overview
 
@@ -9,6 +9,8 @@ This repository contains a portfolio version of a university data science and ma
 The notebook demonstrates:
 
 - public financial and market data retrieval with `yfinance`
+- annual financial-data fallback handling with SEC Company Facts
+- historical price-data fallback handling with Stooq
 - macroeconomic data retrieval from FRED through `pandas-datareader`
 - tabular data preparation and alignment with `pandas`
 - numerical work with `NumPy`
@@ -24,22 +26,23 @@ The notebook demonstrates:
 
 ## Repository Contents
 
-- `project4-finance-ml-analysis.ipynb` — public portfolio version of the notebook
+- `finance-analysis.ipynb` — public portfolio version of the notebook
 - `README.md` — project context, assignment prompt, feedback, tools, and usage notes
 - `requirements.txt` — Python package requirements
+- `.github/workflows/run-notebook.yml` — GitHub Actions workflow for rerunning the notebook and committing updated outputs
 
 The original class filename included a student identifier. This public version uses a descriptive filename instead.
 
 ## Academic Context
 
-This notebook grew out of two related university assignments:
+This notebook grew out of two related university assignments completed in Spring 2025:
 
 1. **Project 3: Data Science Using Python, Pandas, and MatPlotLib**
 2. **Project 4: Machine Learning & Data Science Using Python, Pandas, MatPlotLib, SkiLearn**
 
 Project 3 required a finance-focused data science analysis using Python, pandas, Matplotlib, and `yfinance`. Project 4 required students to extend their Project 3 work with machine-learning techniques.
 
-The Project 3 submission received **105/100**.
+The Project 3 submission received **105/100**.  
 The Project 4 submission received **100/100**.
 
 Instructor feedback for Project 3:
@@ -149,8 +152,12 @@ Project 4 extension:
 - NumPy
 - Matplotlib
 - yfinance
+- SEC Company Facts
+- Stooq
+- FRED
 - pandas-datareader
 - scikit-learn
+- GitHub Actions
 
 ## Risk Analytics Relevance
 
@@ -173,7 +180,9 @@ This project is educational and portfolio-oriented. It is not financial advice, 
 
 The financial calculations are simplified and depend on public data availability. A production model would require stronger source controls, audited period-specific financial inputs, consistent share-count methodology, and more rigorous validation.
 
-Because `yfinance` and FRED retrieve live public data, outputs may change over time depending on API availability, restatements, market dates, and source updates.
+Because `yfinance`, FRED, SEC Company Facts, and Stooq retrieve live public data, outputs may change over time depending on API availability, restatements, market dates, source updates, and public endpoint rate limits.
+
+This repository includes a GitHub Actions workflow that can rerun the notebook and commit updated outputs. The workflow includes retry handling because unauthenticated public data sources may occasionally rate-limit shared GitHub Actions runners or return temporary malformed responses. If a workflow run fails because of a data-source issue, rerunning the workflow may succeed without code changes.
 
 Some model outputs should be interpreted as demonstrations of analytical technique rather than reliable forecasts. The notebook is intended to show data preparation, model construction, visualization, and reasoning, not to predict actual future stock prices.
 
@@ -188,10 +197,28 @@ pip install -r requirements.txt
 Open the notebook:
 
 ```bash
-jupyter notebook project4-finance-ml-analysis.ipynb
+jupyter notebook finance-analysis.ipynb
 ```
 
-Run all cells from top to bottom. The notebook requires internet access because it retrieves current public data from Yahoo Finance and FRED.
+Run all cells from top to bottom. The notebook requires internet access because it retrieves public financial, market, and macroeconomic data from live data sources.
+
+## GitHub Actions Workflow
+
+The repository includes a workflow that can run the notebook online and commit the executed notebook back to the repository.
+
+The workflow:
+
+- installs the Python dependencies from `requirements.txt`
+- clears stale notebook outputs
+- executes the notebook
+- retries execution if a temporary data-source failure occurs
+- commits the updated `finance-analysis.ipynb` file back to the repository
+
+Manual execution path:
+
+```text
+GitHub repository → Actions → Run finance notebook → Run workflow
+```
 
 ## Suggested Portfolio Summary
 
